@@ -109,125 +109,127 @@ const CreditCardForm: React.FC<LibraryProps> = (props) => {
         <Conditional condition={!props.formOnly}>
           <FormCard cardType={card?.type} focusedField={focusedField} />
         </Conditional>
-        <ScrollView
-          ref={scrollRef}
-          style={isHorizontal && { maxHeight: 120 }}
-          pagingEnabled={isHorizontal}
-          horizontal={isHorizontal}
-          scrollEnabled={!isHorizontal}
-          keyboardShouldPersistTaps="handled"
-        >
-          <FormTextField
-            style={textFieldStyle}
-            ref={cardNumberRef}
-            name="cardNumber"
-            label={translations.cardNumber}
-            keyboardType="number-pad"
-            autoCompleteType="cc-number"
-            maxLength={19}
-            validationLength={isAmex ? 18 : 19}
-            rules={{
-              required: translations.cardNumberRequired,
-              validate: {
-                isValid: (value: string) => {
-                  return (
-                    cardValidator.number(value).isValid ||
-                    translations.cardNumberInvalid
-                  )
-                },
-              },
-            }}
-            formatter={cardNumberFormatter}
-            endEnhancer={<CardIcon cardNumber={cardNumber} />}
-            onFocus={() => setFocusedField(CardFields.CardNumber)}
-            onValid={goNext}
-          />
-          <FormTextField
-            style={textFieldStyle}
-            ref={holderNameRef}
-            name="holderName"
-            autoCompleteType="name"
-            label={translations.cardHolderName}
-            rules={{
-              required: translations.cardHolderNameRequired,
-              validate: {
-                isValid: (value: string) => {
-                  return (
-                    cardValidator.cardholderName(value).isValid ||
-                    translations.cardHolderNameInvalid
-                  )
-                },
-              },
-            }}
-            autoCorrect={false}
-            onSubmitEditing={goNext}
-            onFocus={() => setFocusedField(CardFields.CardHolderName)}
-          />
-          <View style={styles.row}>
+        <Conditional condition={!props?.ccOnly}>
+          <ScrollView
+            ref={scrollRef}
+            style={isHorizontal && { maxHeight: 120 }}
+            pagingEnabled={isHorizontal}
+            horizontal={isHorizontal}
+            scrollEnabled={!isHorizontal}
+            keyboardShouldPersistTaps="handled"
+          >
             <FormTextField
-              style={[
-                textFieldStyle,
-                {
-                  marginRight: isHorizontal ? 0 : 24,
-                },
-              ]}
-              ref={expirationRef}
-              name="expiration"
-              label={translations.expiration}
+              style={textFieldStyle}
+              ref={cardNumberRef}
+              name="cardNumber"
+              label={translations.cardNumber}
               keyboardType="number-pad"
-              autoCompleteType="cc-exp"
-              maxLength={5}
-              validationLength={5}
+              autoCompleteType="cc-number"
+              maxLength={19}
+              validationLength={isAmex ? 18 : 19}
               rules={{
-                required: translations.expirationRequired,
+                required: translations.cardNumberRequired,
                 validate: {
                   isValid: (value: string) => {
                     return (
-                      cardValidator.expirationDate(value).isValid ||
-                      translations.expirationInvalid
+                      cardValidator.number(value).isValid ||
+                      translations.cardNumberInvalid
                     )
                   },
                 },
               }}
-              formatter={expirationDateFormatter}
-              onFocus={() => setFocusedField(CardFields.Expiration)}
+              formatter={cardNumberFormatter}
+              endEnhancer={<CardIcon cardNumber={cardNumber} />}
+              onFocus={() => setFocusedField(CardFields.CardNumber)}
               onValid={goNext}
             />
             <FormTextField
               style={textFieldStyle}
-              ref={cvvRef}
-              name="cvv"
-              label={translations.securityCode}
-              keyboardType="number-pad"
-              autoCompleteType="cc-csc"
-              maxLength={cvvLength}
-              validationLength={cvvLength}
+              ref={holderNameRef}
+              name="holderName"
+              autoCompleteType="name"
+              label={translations.cardHolderName}
               rules={{
-                required: translations.securityCodeRequired,
+                required: translations.cardHolderNameRequired,
                 validate: {
                   isValid: (value: string) => {
                     return (
-                      cardValidator.cvv(value, cvvLength).isValid ||
-                      translations.securityCodeInvalid
+                      cardValidator.cardholderName(value).isValid ||
+                      translations.cardHolderNameInvalid
                     )
                   },
                 },
               }}
-              onFocus={() => setFocusedField(CardFields.CVV)}
-              onValid={goNext}
+              autoCorrect={false}
+              onSubmitEditing={goNext}
+              onFocus={() => setFocusedField(CardFields.CardHolderName)}
             />
-          </View>
-        </ScrollView>
-        <Conditional condition={isHorizontal}>
-          <Button
-            style={[styles.button, overrides?.button]}
-            title={
-              focusedField === CardFields.CVV
-                ? translations.done
-                : translations.next
-            }
-            onPress={goNext}
-          />
+            <View style={styles.row}>
+              <FormTextField
+                style={[
+                  textFieldStyle,
+                  {
+                    marginRight: isHorizontal ? 0 : 24,
+                  },
+                ]}
+                ref={expirationRef}
+                name="expiration"
+                label={translations.expiration}
+                keyboardType="number-pad"
+                autoCompleteType="cc-exp"
+                maxLength={5}
+                validationLength={5}
+                rules={{
+                  required: translations.expirationRequired,
+                  validate: {
+                    isValid: (value: string) => {
+                      return (
+                        cardValidator.expirationDate(value).isValid ||
+                        translations.expirationInvalid
+                      )
+                    },
+                  },
+                }}
+                formatter={expirationDateFormatter}
+                onFocus={() => setFocusedField(CardFields.Expiration)}
+                onValid={goNext}
+              />
+              <FormTextField
+                style={textFieldStyle}
+                ref={cvvRef}
+                name="cvv"
+                label={translations.securityCode}
+                keyboardType="number-pad"
+                autoCompleteType="cc-csc"
+                maxLength={cvvLength}
+                validationLength={cvvLength}
+                rules={{
+                  required: translations.securityCodeRequired,
+                  validate: {
+                    isValid: (value: string) => {
+                      return (
+                        cardValidator.cvv(value, cvvLength).isValid ||
+                        translations.securityCodeInvalid
+                      )
+                    },
+                  },
+                }}
+                onFocus={() => setFocusedField(CardFields.CVV)}
+                onValid={goNext}
+              />
+            </View>
+          </ScrollView>
+          <Conditional condition={isHorizontal}>
+            <Button
+              style={[styles.button, overrides?.button]}
+              title={
+                focusedField === CardFields.CVV
+                  ? translations.done
+                  : translations.next
+              }
+              onPress={goNext}
+            />
+          </Conditional>
         </Conditional>
       </View>
     </LibraryContext.Provider>

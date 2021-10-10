@@ -11,7 +11,7 @@ const FormCard: React.FC<Props> = ({ cardType, focusedField }) => {
 
   return (
     <Card
-      cardType={cardType}
+      cardType={cardType || model?.cardType}
       focusedField={focusedField}
       model={{
         cardNumber: model.cardNumber,

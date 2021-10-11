@@ -5,6 +5,7 @@ import LibraryContext from '../../LibraryContext'
 
 type Props = {
   cardNumber: string
+  cardType: string
 }
 
 type Card = {
@@ -35,7 +36,7 @@ const CARDS: Record<string, Card> = {
 
 const CardIcon: React.FC<Props> = (props) => {
   const { LottieView } = useContext(LibraryContext)
-  const { cardNumber } = props
+  const { cardNumber, cardType } = props
   const { card } = cardValidator.number(cardNumber)
 
   const animRef = useCallback((node) => {
@@ -43,7 +44,7 @@ const CardIcon: React.FC<Props> = (props) => {
       node.play()
     }
   }, [])
-  const data: Card = CARDS[card?.type || -1]
+  const data: Card = CARDS[card?.type || cardType || -1]
 
   if (!data) return null
 

@@ -69,7 +69,7 @@ const FrontSide: React.FC<Props> = ({ model, cardType, focusedField }) => {
   return (
     <>
       <View style={styles.header}>
-        <CardIcon cardNumber={model.cardNumber} />
+        <CardIcon cardNumber={model.cardNumber} cardType={model?.cardType} />
       </View>
       <PlaceholderText
         style={[

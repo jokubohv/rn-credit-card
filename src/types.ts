@@ -5,6 +5,7 @@ export interface FormModel {
   cardNumber: string
   expiration: string
   cvv: string
+  cardType: string
 }
 
 export enum CardFields {

@@ -18,6 +18,7 @@ const FormCard: React.FC<Props> = ({ cardType, focusedField }) => {
         expiration: model.expiration,
         holderName: model.holderName,
         cvv: model.cvv,
+        cardType: model?.cardType,
       }}
     />
   )

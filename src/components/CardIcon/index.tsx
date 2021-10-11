@@ -5,7 +5,7 @@ import LibraryContext from '../../LibraryContext'
 
 type Props = {
   cardNumber: string
-  cardType: string
+  cardType?: string
 }
 
 type Card = {
@@ -44,7 +44,7 @@ const CardIcon: React.FC<Props> = (props) => {
       node.play()
     }
   }, [])
-  const data: Card = CARDS[card?.type || cardType || -1]
+  const data: Card = cardType ? CARDS[cardType] : CARDS[card?.type || -1]
 
   if (!data) return null
 
